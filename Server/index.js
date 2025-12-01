@@ -53,7 +53,7 @@ mongoose
 
 // Import Routes
 const candidateRoutes = require("./Routes/candidateRoutes");
-const vacancynoticeRoutes = require("./Routes/vacancyRoutes.js");
+const vacancyRoutes = require("./Routes/vacancyRoutes.js");
 const telecallerRoutes = require("./Routes/telecallerRoutes.js");
 const telemarketerRoutes = require("./Routes/telemarketerRoutes.js");
 const OARoutes = require("./Routes/OARoutes.js");
@@ -84,8 +84,9 @@ const cre = require("./Routes/CRE.js");
 const employeeRoute = require("./Routes/employeeRoute");
 
 // Routes
-
-app.use("/api/vacancynotice", vacancynoticeRoutes);
+app.use("/vacancy-images", express.static(path.join(__dirname, "public/vacancy-creation-images")));
+app.use("/candidate-resumes", express.static(path.join(__dirname, "public/candidate-resumes")));
+app.use("/api/vacancynotice", vacancyRoutes);
 app.use("/api/addcandidate", candidateRoutes);
 app.use("/api/telemarketer", telemarketerRoutes);
 app.use("/api/telecaller", telecallerRoutes);

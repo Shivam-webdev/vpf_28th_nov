@@ -15,7 +15,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import AddCandidateForm from "./AddCandidateForm";
+
 import {
   FaCalendar,
   FaChartLine,

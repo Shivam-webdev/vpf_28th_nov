@@ -1,3 +1,4 @@
+// AppRoutes.jsx - Updated with Proper HR Routes
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../Layout/Layout";
@@ -7,7 +8,6 @@ import BusyOnAnotherCallPage from "../Components/EmployeeDashboard/TelecallerDas
 import CallAfterSomeTimePage from "../Components/EmployeeDashboard/TelecallerDashboard/CallAfterSomeTimePage";
 import CallNotPickedPage from "../Components/EmployeeDashboard/TelecallerDashboard/CallNotPickedPage";
 import OthersLeadsPage from "../Components/EmployeeDashboard/TelecallerDashboard/OthersLeadsPage";
-// import AppointmentComponent from "../Components/EmployeeDashboard/TelecallerDashboard/Appointment";
 import BalanceLeadsPage from "../Components/EmployeeDashboard/TelecallerDashboard/BalanceLeadsPage";
 import CallingDonePage from "../Components/EmployeeDashboard/TelecallerDashboard/CallingDonePage";
 // Master Components
@@ -79,6 +79,18 @@ import Appointment from "../Components/Appointment";
 import CREDashboard from "../Components/CREDashboard";
 import HRDashboard from "../Components/HRDashboard/HRDashboard";
 import EmployeeDetails from "../Components/Employee/OfficeAdmin/EmployeeDetails";
+
+// Import new HR Dashboard modules
+import HRDashboardHome from "../Components/HRDashboard/HRDashboardHome";
+import Analytics from "../Components/HRDashboard/modules/Analytics";
+import BusinessAssociates from "../Components/HRDashboard/modules/BusinessAssociates";
+import VacancyManagement from "../Components/HRDashboard/modules/VacancyManagement";
+import AddCandidate from "../Components/HRDashboard/modules/AddCandidate";
+import CareerEnquiryHR from "../Components/HRDashboard/modules/CareerEnquiry";
+import ResumeShortlistHR from "../Components/HRDashboard/modules/ResumeShortlist";
+import InterviewProcessHR from "../Components/HRDashboard/modules/InterviewProcess";
+import JoiningDataHR from "../Components/HRDashboard/modules/JoiningData";
+
 // 🔒 ProtectedRoute Component (Strict Role Check)
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -102,7 +114,6 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* 🌍 Public Routes ONLY - Register & Login */}
-
       <Route path="/telecaller/register" element={<Registertelecaller />} />
       <Route path="/telemarketer/register" element={<Registertelemarketer />} />
       <Route path="/OE/register" element={<RegisterOE />} />
@@ -115,10 +126,11 @@ const AppRoutes = () => {
       <Route path="/OE/login" element={<LoginOE />} />
       <Route path="/auth/login" element={<Login />} />
 
+      {/* 👥 HR Dashboard Routes - Complete Implementation */}
       <Route
         path="/dashboard/*"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["HR"]}>
             <HRDashboard />
           </ProtectedRoute>
         }
@@ -148,14 +160,8 @@ const AppRoutes = () => {
 
         {/* 🟢 Children of Active Leads */}
         <Route path="Callback" element={<Callback />} />
-        <Route
-          path="busy-on-another-call"
-          element={<BusyOnAnotherCallPage />}
-        />
-        <Route
-          path="call-after-some-time"
-          element={<CallAfterSomeTimePage />}
-        />
+        <Route path="busy-on-another-call" element={<BusyOnAnotherCallPage />} />
+        <Route path="call-after-some-time" element={<CallAfterSomeTimePage />} />
         <Route path="call-not-picked" element={<CallNotPickedPage />} />
         <Route path="others" element={<OthersLeadsPage />} />
 
@@ -163,11 +169,6 @@ const AppRoutes = () => {
         <Route path="wrong-number" element={<WrongNumber />} />
         <Route path="not-reachable" element={<NotReachable />} />
       </Route>
-
-      {/* 
- <Route   path="/telecaller/reject" element={<RejectedLeadsPage />} /> */}
-
-      {/* 🟢 Children of Active Leads */}
 
       {/* 🏢 OA (Office Admin) - Only OA can access Layout & all other routes */}
       <Route
@@ -202,8 +203,6 @@ const AppRoutes = () => {
         <Route path="/client/edit/:id" element={<ClientFirstFrom />} />
         <Route path="/client/detail/:id" element={<CustomerDetail />} />
 
-        <Route path="/client/detail/:id" element={<CustomerDetail />} />
-
         <Route path="/suspect" element={<SuspectLeadsTabs />} />
         <Route path="/suspect/add" element={<SuspectFirstForm />} />
         <Route path="/suspect/edit/:id" element={<SuspectFirstForm />} />
@@ -219,8 +218,9 @@ const AppRoutes = () => {
 
         {/* Employee - Only OA */}
         <Route path="/add-employee" element={<EmployeeAddForm />} />
+        <Route path="/employee/:id" element={<EmployeeDetails />} />
         
-<Route path="/employee/:id" element={<EmployeeDetails />} />
+        {/* HR Module Routes for OA */}
         <Route path="/career-enquiry" element={<CareerEnquiry />} />
         <Route path="/vacancy-notice" element={<VacancyNotice />} />
         <Route path="/addcandidate" element={<Addcandidate />} />
@@ -238,24 +238,6 @@ const AppRoutes = () => {
         <Route path="/office-purchase" element={<OfficePurchase />} />
         <Route path="/important-documents" element={<ImpDocument />} />
         <Route path="/CRE" element={<CREDashboard />} />
-      </Route>
-
-      {/* 👥 HR - HR Dashboard Routes */}
-      <Route
-        path="/hr"
-        element={
-          <ProtectedRoute allowedRoles={["HR"]}>
-            <HRDashboard />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={null} />
-        <Route path="vacancies/*" element={null} />
-        <Route path="recruitment/*" element={null} />
-        <Route path="candidate/:id" element={null} />
-        <Route path="business-associates/*" element={null} />
-        <Route path="analytics" element={null} />
       </Route>
 
       {/* 🔧 OE - Only OE specific routes (if any) can be added here */}

@@ -1,61 +1,37 @@
 // components/HRDashboard/Sidebar.jsx
-import React, { useState } from "react";
+import React from "react";
 import {
   FaSignOutAlt,
   FaHome,
   FaFileAlt,
-  FaSync,
   FaUsers,
   FaChartBar,
-  FaHandshake,
-  FaChevronDown,
-  FaChevronUp,
+  FaUserPlus,
+  FaEnvelope,
+  FaListAlt,
+  FaUserCheck,
+  FaBusinessTime
 } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [recruitmentOpen, setRecruitmentOpen] = useState(false);
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: <FaHome /> },
-    {
-      name: "Vacancy Management",
-      href: "/dashboard/vacancies",
-      icon: <FaFileAlt />,
-    },
-    {
-      name: "Employee Recruitment",
-      icon: <FaSync />,
-      subItems: [
-        { name: "Internship Data", href: "/dashboard/internship-data" },
-        { name: "Employee Training", href: "/dashboard/employee-training" },
-        { name: "HR Rules & Regulations", href: "/dashboard/rules-regulations" },
-        { name: "Vacancy Notice", href: "/dashboard/vacancy-notice" },
-        { name: "Shortlisted Resumes", href: "/dashboard/resume-shortlist" },
-        { name: "Interview Process", href: "/dashboard/interview-process" },
-        { name: "Joining Data", href: "/dashboard/joining-data" },
-        { name: "Job Profile & Target", href: "/dashboard/job-profile-target" },
-      ],
-    },
-    {
-      name: "Business Associates",
-      href: "/dashboard/business-associates",
-      icon: <FaUsers />,
-    },
-    {
-      name: "Internship",
-      href: "/dashboard/internship",
-      icon: <FaHandshake />,
-    },
-    { name: "Analytics", href: "/dashboard/analytics", icon: <FaChartBar /> },
+    { name: "Vacancy Management", href: "/dashboard/vacancies", icon: <FaFileAlt /> },
+    { name: "Add Candidate", href: "/dashboard/add-candidate", icon: <FaUserPlus /> },
+    { name: "Career Enquiry", href: "/dashboard/career-enquiry", icon: <FaListAlt /> },
+    { name: "Resume Shortlisted", href: "/dashboard/resume-shortlist", icon: <FaUserCheck /> },
+    { name: "Interview Process", href: "/dashboard/interview-process", icon: <FaFileAlt /> },
+    { name: "Joining Data", href: "/dashboard/joining-data", icon: <FaBusinessTime /> },
+    { name: "Business Associates", href: "/dashboard/business-associates", icon: <FaUsers /> },
+    { name: "Analytics", href: "/dashboard/analytics", icon: <FaChartBar /> }
   ];
 
   const isActive = (href) => {
-    return (
-      location.pathname === href || location.pathname.startsWith(href + "/")
-    );
+    return location.pathname === href || location.pathname.startsWith(href + "/");
   };
 
   const handleLogout = () => {
@@ -79,70 +55,64 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         className={`hr-sidebar d-flex flex-column ${
           sidebarOpen ? "" : "mobile-hidden"
         }`}
+        style={{
+          backgroundColor: 'white',
+          color: 'black',
+          borderRight: '1px solid #e0e0e0',
+          width: '280px'
+        }}
       >
         {/* Close button for mobile */}
         <div className="d-md-none text-end p-2 border-bottom">
           <button
             className="btn btn-sm btn-link text-dark"
             onClick={() => setSidebarOpen(false)}
+            style={{ textDecoration: 'none' }}
           >
             ✕
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-3 overflow-auto">
-          {navigation.map((item) =>
-            item.subItems ? (
-              <div key={item.name}>
-                <button
-                  className={`hr-nav-link w-100 text-start d-flex align-items-center justify-content-between ${
-                    recruitmentOpen ? "active" : ""
-                  }`}
-                  onClick={() => setRecruitmentOpen(!recruitmentOpen)}
-                >
-                  <div>
-                    <span className="me-3 fs-5">{item.icon}</span>
-                    {item.name}
-                  </div>
-                  {recruitmentOpen ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
-                {recruitmentOpen && (
-                  <div className="ps-4 mt-2">
-                    {item.subItems.map((sub) => (
-                      <Link
-                        key={sub.name}
-                        to={sub.href}
-                        className={`hr-nav-link small d-block py-1 ${
-                          isActive(sub.href) ? "active" : ""
-                        }`}
-                        onClick={() => setSidebarOpen(false)}
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+        <nav className="flex-1 px-2 py-3 overflow-auto">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={`d-block text-decoration-none py-2 px-3 mb-1 ${
+                isActive(item.href) 
+                  ? 'border-start border-3 border-dark fw-bold' 
+                  : 'text-dark'
+              }`}
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                backgroundColor: isActive(item.href) ? '#f8f9fa' : 'transparent',
+                fontSize: '14px',
+                transition: 'none'
+              }}
+            >
+              <div className="d-flex align-items-center">
+                <span className="me-3" style={{ fontSize: '16px', minWidth: '20px' }}>
+                  {item.icon}
+                </span>
+                <span>{item.name}</span>
               </div>
-            ) : (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`hr-nav-link ${isActive(item.href) ? "active" : ""}`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <span className="me-3 fs-5">{item.icon}</span>
-                {item.name}
-              </Link>
-            )
-          )}
+            </Link>
+          ))}
         </nav>
 
         {/* Logout Button */}
         <div className="p-3 border-top">
           <button
             onClick={handleLogout}
-            className="hr-btn-danger w-100 d-flex align-items-center justify-content-center"
+            className="w-100 d-flex align-items-center justify-content-center py-2"
+            style={{
+              backgroundColor: 'white',
+              color: 'black',
+              border: '1px solid #dc3545',
+              fontSize: '14px',
+              cursor: 'pointer'
+            }}
           >
             <span className="me-2">
               <FaSignOutAlt />
